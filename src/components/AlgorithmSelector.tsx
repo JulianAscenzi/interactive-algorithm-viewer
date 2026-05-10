@@ -9,7 +9,7 @@ interface AlgorithmSelectorProps {
 export function AlgorithmSelector({ selectedId, onSelect }: AlgorithmSelectorProps) {
   return (
     <div className="algo-selector">
-      {ALGORITHMS.map((algo) => (
+      {ALGORITHMS.map((algo: AlgorithmMeta) => (
         <button
           key={algo.id}
           className={`algo-btn ${selectedId === algo.id ? "active" : ""}`}

@@ -7,7 +7,7 @@ export type { Step };
 export interface AlgorithmMeta {
   id: string;
   name: string;
-  category: string;
+  category: "Sorting" | "Tree" | "Graph";
   complexity: { time: string; space: string };
   description: string;
   code: string[];
