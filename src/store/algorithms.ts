@@ -51,7 +51,7 @@ export const useAlgorithmStore = create<AlgorithmStore>((set, get) => ({
     const { selectedId, inputArray } = get();
     const algo = getAlgorithm(selectedId);
     const steps = algo.run(inputArray);
-    set({ steps, currentStep: 0, isPlaying: false });
+    set({ steps, currentStep: 0, isPlaying: true });
   },
 
   nextStep: () => {

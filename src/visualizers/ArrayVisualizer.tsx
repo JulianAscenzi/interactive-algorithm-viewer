@@ -12,9 +12,9 @@ export function ArrayVisualizer({ step, inputArray }: ArrayVisualizerProps) {
   const n = arr.length;
 
   const SVG_W = 640, SVG_H = 260;
-  const GAP = 6;
+  const GAP = n > 80 ? 1 : n > 50 ? 2 : n > 30 ? 4 : 6;
   const totalW = SVG_W - 40;
-  const barW = Math.floor((totalW - GAP * (n - 1)) / n);
+  const barW = Math.max(1, Math.floor((totalW - GAP * (n - 1)) / n));
   const maxBarH = SVG_H - 60;
 
   function getBarColor(i: number): string {
