@@ -96,6 +96,11 @@ export default function BSTPage() {
 
   const badge = step ? BADGE[step.type] : null;
 
+  // Cleanup: stop playback on unmount
+  useEffect(() => {
+    return () => setPlaying(false);
+  }, []);
+
   return (
     <div className="bst-page">
       {/* Mode tabs */}

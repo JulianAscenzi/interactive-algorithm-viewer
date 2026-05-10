@@ -38,7 +38,7 @@ export function ControlPanel({
   onGenerate,
   onSpeedChange,
 }: ControlPanelProps) {
-  const isFinished = hasSteps && currentStep >= totalSteps - 1;
+  const isFinished = hasSteps && totalSteps > 1 && currentStep >= totalSteps - 1;
   const progress = totalSteps > 1 ? (currentStep / (totalSteps - 1)) * 100 : 0;
 
   return (
