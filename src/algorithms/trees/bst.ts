@@ -111,7 +111,7 @@ export function bstInsertSteps(
       const id = freshId();
       tree[id] = { id, value, left: null, right: null };
       newNodeId = id;
-      snap("insert", `Node ${value} inserted as a new leaf.`, 2, id);
+      // We don't snap here anymore, we'll snap in the caller after linking
       return id;
     }
 
@@ -120,12 +120,26 @@ export function bstInsertSteps(
 
     if (value < node.value) {
       snap("compare-left", `${value} < ${node.value} → go left`, 4, nodeId);
-      const newLeft = insertRec(node.left);
-      tree[nodeId] = { ...tree[nodeId], left: newLeft };
+      const childId = node.left;
+      const newLeft = insertRec(childId);
+      if (childId === null) {
+        // Just inserted a new leaf
+        tree[nodeId] = { ...tree[nodeId], left: newLeft };
+        snap("insert", `Node ${value} inserted as a new leaf.`, 2, newLeft);
+      } else {
+        tree[nodeId] = { ...tree[nodeId], left: newLeft };
+      }
     } else if (value > node.value) {
       snap("compare-right", `${value} > ${node.value} → go right`, 7, nodeId);
-      const newRight = insertRec(node.right);
-      tree[nodeId] = { ...tree[nodeId], right: newRight };
+      const childId = node.right;
+      const newRight = insertRec(childId);
+      if (childId === null) {
+        // Just inserted a new leaf
+        tree[nodeId] = { ...tree[nodeId], right: newRight };
+        snap("insert", `Node ${value} inserted as a new leaf.`, 2, newRight);
+      } else {
+        tree[nodeId] = { ...tree[nodeId], right: newRight };
+      }
     } else {
       snap("found", `${value} already exists in the tree — skipping.`, 11, nodeId);
     }
@@ -133,7 +147,12 @@ export function bstInsertSteps(
     return nodeId;
   }
 
-  rootId = insertRec(rootId);
+  if (rootId === null) {
+    rootId = insertRec(null);
+    snap("insert", `Node ${value} inserted as the root.`, 2, rootId);
+  } else {
+    insertRec(rootId);
+  }
 
   snap("idle", `Done. ${value} is now in the tree.`, 11, null);
   return steps;
