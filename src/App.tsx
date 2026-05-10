@@ -19,6 +19,13 @@ export default function App() {
     nextStep, prevStep, play, pause, reset, setSpeed,
   } = useAlgorithmStore();
 
+  // Cleanup: pause playback when switching sections or unmounting
+  useEffect(() => {
+    return () => {
+      pause();
+    };
+  }, [section, pause]);
+
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const algo = getAlgorithm(selectedId);
   const step = steps.length > 0 ? steps[currentStep] : null;
