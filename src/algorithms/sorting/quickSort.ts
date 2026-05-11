@@ -9,25 +9,25 @@ export interface Step {
   partitionRange: [number, number] | null;
   type: StepType;
   description: string;
-  highlightLine: number; // index into CODE_LINES
+  highlightLine: number;
 }
 
 export const QUICK_SORT_CODE = [
   "function quickSort(arr, low, high) {",   // 0
-  "  if (low < high) {",                     // 1
-  "    let pivot = arr[high]",               // 2
-  "    let i = low - 1",                     // 3
-  "    for (let j = low; j < high; j++) {",  // 4
-  "      if (arr[j] <= pivot) {",            // 5
-  "        i++",                             // 6
-  "        swap(arr, i, j)",                 // 7
-  "      }",                                 // 8
-  "    }",                                   // 9
-  "    swap(arr, i + 1, high)  // pivot",    // 10
-  "    quickSort(arr, low, i)",              // 11
-  "    quickSort(arr, i + 2, high)",         // 12
-  "  }",                                     // 13
-  "}",                                       // 14
+  "  if (low < high) {",                    // 1
+  "    let pivot = arr[high]",              // 2
+  "    let i = low - 1",                    // 3
+  "    for (let j = low; j < high; j++) {", // 4
+  "      if (arr[j] <= pivot) {",           // 5
+  "        i++",                            // 6
+  "        swap(arr, i, j)",                // 7
+  "      }",                                // 8
+  "    }",                                  // 9
+  "    swap(arr, i + 1, high)  // pivot",   // 10
+  "    quickSort(arr, low, i)",             // 11
+  "    quickSort(arr, i + 2, high)",        // 12
+  "  }",                                    // 13
+  "}",                                      // 14
 ];
 
 export function quickSort(input: number[]): Step[] {
@@ -66,20 +66,21 @@ export function quickSort(input: number[]): Step[] {
     addStep("partition", `i = ${i}, scanning from ${low} to ${high - 1}`, 3, null, false, high, [low, high]);
 
     for (let j = low; j < high; j++) {
-      addStep("compare", `Comparing arr[${j}]=${arr[j]} ≤ pivot(${pivot})?`, 5, [j, high], false, high, [low, high]);
+      addStep("compare", `Comparing arr[${j}]=${arr[j]} <= pivot(${pivot})?`, 5, [j, high], false, high, [low, high]);
 
       if (arr[j] <= pivot) {
         i++;
-        addStep("partition", `arr[${j}] ≤ pivot → i becomes ${i}`, 6, [i, j], false, high, [low, high]);
+        addStep("partition", `arr[${j}] <= pivot -> i becomes ${i}`, 6, [i, j], false, high, [low, high]);
 
         if (i !== j) {
+          const beforeI = arr[i];
+          const beforeJ = arr[j];
           [arr[i], arr[j]] = [arr[j], arr[i]];
-          addStep("swap", `Swapping arr[${i}]=${arr[i]} and arr[${j}]=${arr[j]}`, 7, [i, j], true, high, [low, high]);
+          addStep("swap", `Swapping arr[${i}]=${beforeI} and arr[${j}]=${beforeJ}`, 7, [i, j], true, high, [low, high]);
         }
       }
     }
 
-    // Place pivot in correct position
     [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
     const pivotFinal = i + 1;
     sortedIndices.push(pivotFinal);
@@ -108,7 +109,7 @@ export function quickSort(input: number[]): Step[] {
   steps.push({
     array: [...arr], comparing: null, swapped: false,
     sortedIndices: all, pivotIndex: null, partitionRange: null,
-    type: "sorted", description: "🎉 Array fully sorted!",
+    type: "sorted", description: "Array fully sorted.",
     highlightLine: 14,
   });
 

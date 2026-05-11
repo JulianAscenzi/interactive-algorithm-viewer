@@ -68,7 +68,7 @@ export function ArrayVisualizer({ step, inputArray }: ArrayVisualizerProps) {
               {!isPivot && step?.comparing?.includes(i) && !step?.sortedIndices.includes(i) && (
                 <text x={x + barW / 2} y={y - 22} textAnchor="middle" fontSize={12}
                   fill={step.swapped ? "var(--bar-swap)" : "var(--bar-compare)"}
-                >▼</text>
+                >v</text>
               )}
             </g>
           );

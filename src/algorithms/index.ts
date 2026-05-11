@@ -19,7 +19,7 @@ export const ALGORITHMS: AlgorithmMeta[] = [
     id: "bubble-sort",
     name: "Bubble Sort",
     category: "Sorting",
-    complexity: { time: "O(n²)", space: "O(1)" },
+    complexity: { time: "O(n^2)", space: "O(1)" },
     description: "Repeatedly compares adjacent elements and swaps them if out of order. Simple but inefficient for large arrays.",
     code: BUBBLE_SORT_CODE,
     run: bubbleSort,

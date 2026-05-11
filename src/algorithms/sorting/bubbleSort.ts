@@ -61,7 +61,7 @@ export function bubbleSort(input: number[]): Step[] {
         steps.push({
           array: [...arr], comparing: [j, j + 1], swapped: true,
           sortedIndices: [...sortedIndices], pivotIndex: null, partitionRange: null,
-          type: "swap", description: `arr[${j}] > arr[${j + 1}] → swapping`,
+          type: "swap", description: `arr[${j}] > arr[${j + 1}] -> swapping`,
           highlightLine: 4,
         });
       }
@@ -85,7 +85,7 @@ export function bubbleSort(input: number[]): Step[] {
   steps.push({
     array: [...arr], comparing: null, swapped: false,
     sortedIndices: all, pivotIndex: null, partitionRange: null,
-    type: "sorted", description: "🎉 Array fully sorted!",
+    type: "sorted", description: "Array fully sorted.",
     highlightLine: 8,
   });
 

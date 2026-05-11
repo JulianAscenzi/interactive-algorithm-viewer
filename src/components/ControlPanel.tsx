@@ -17,10 +17,10 @@ interface ControlPanelProps {
 }
 
 const SPEED_OPTIONS = [
-  { label: "0.5×", value: 800 },
-  { label: "1×", value: 400 },
-  { label: "2×", value: 200 },
-  { label: "4×", value: 80 },
+  { label: "0.5x", value: 800 },
+  { label: "1x", value: 400 },
+  { label: "2x", value: 200 },
+  { label: "4x", value: 80 },
 ];
 
 export function ControlPanel({
@@ -43,15 +43,13 @@ export function ControlPanel({
 
   return (
     <div className="control-panel">
-      {/* Step info */}
       <div className="step-info">
         <span className="step-badge">
           {hasSteps ? `Step ${currentStep + 1} / ${totalSteps}` : "Ready to start"}
         </span>
-        {isFinished && <span className="done-badge">✓ Sorted</span>}
+        {isFinished && <span className="done-badge">Sorted</span>}
       </div>
 
-      {/* Progress bar */}
       {hasSteps && (
         <div className="progress-bar">
           <div
@@ -61,26 +59,23 @@ export function ControlPanel({
         </div>
       )}
 
-      {/* Main controls */}
       <div className="controls-row">
-        {/* Generate & Run */}
         <button className="btn btn-secondary" onClick={onGenerate} title="Generate random array">
-          ⟳ New
+          New
         </button>
         <button className="btn btn-primary" onClick={onRun}>
-          {hasSteps ? "↺ Restart" : "▶ Run"}
+          {hasSteps ? "Restart" : "Run"}
         </button>
 
         <div className="divider" />
 
-        {/* Step controls */}
         <button
           className="btn btn-icon"
           onClick={onPrev}
           disabled={!hasSteps || currentStep === 0}
           title="Previous step"
         >
-          ◀◀
+          Prev
         </button>
 
         <button
@@ -89,7 +84,7 @@ export function ControlPanel({
           disabled={!hasSteps || isFinished}
           title={isPlaying ? "Pause" : "Play"}
         >
-          {isPlaying ? "⏸" : "▶"}
+          {isPlaying ? "Pause" : "Play"}
         </button>
 
         <button
@@ -98,7 +93,7 @@ export function ControlPanel({
           disabled={!hasSteps || isFinished}
           title="Next step"
         >
-          ▶▶
+          Next
         </button>
 
         <button
@@ -107,11 +102,10 @@ export function ControlPanel({
           disabled={!hasSteps || currentStep === 0}
           title="Go to start"
         >
-          ⏮
+          Start
         </button>
       </div>
 
-      {/* Speed selector */}
       <div className="speed-row">
         <span className="speed-label">Speed</span>
         <div className="speed-buttons">

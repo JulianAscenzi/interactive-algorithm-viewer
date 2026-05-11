@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAlgorithmStore } from "./store/algorithms";
-import { getAlgorithm, ALGORITHMS } from "./algorithms";
+import { getAlgorithm } from "./algorithms";
 import { ArrayVisualizer } from "./visualizers/ArrayVisualizer";
 import { ControlPanel } from "./components/ControlPanel";
 import { CodeHighlighter } from "./components/CodeHighlighter";
@@ -19,7 +19,6 @@ export default function App() {
     nextStep, prevStep, play, pause, reset, setSpeed,
   } = useAlgorithmStore();
 
-  // Cleanup: pause playback when switching sections or unmounting
   useEffect(() => {
     return () => {
       pause();
@@ -35,26 +34,30 @@ export default function App() {
     if (isPlaying && steps.length > 0) {
       intervalRef.current = setInterval(() => {
         const { currentStep, steps, pause } = useAlgorithmStore.getState();
-        if (currentStep >= steps.length - 1) { pause(); }
-        else { useAlgorithmStore.getState().nextStep(); }
+        if (currentStep >= steps.length - 1) {
+          pause();
+        } else {
+          useAlgorithmStore.getState().nextStep();
+        }
       }, speed);
     }
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, [isPlaying, speed, steps.length]);
 
   const BADGE: Record<string, [string, string, string]> = {
-    compare:   ["🔍 Comparing",   "#7c6af7", "rgba(124,106,247,0.15)"],
-    swap:      ["↔ Swapping",     "#f87171", "rgba(248,113,113,0.15)"],
-    sorted:    ["✓ Sorted",       "#34d399", "rgba(52,211,153,0.15)"],
-    pivot:     ["◈ Pivot",        "#fbbf24", "rgba(251,191,36,0.15)"],
-    partition: ["⟨⟩ Partition",   "#38bdf8", "rgba(56,189,248,0.12)"],
-    idle:      ["◉ Start",        "#6666aa", "rgba(100,100,170,0.12)"],
+    compare: ["Comparing", "#7c6af7", "rgba(124,106,247,0.15)"],
+    swap: ["Swapping", "#f87171", "rgba(248,113,113,0.15)"],
+    sorted: ["Sorted", "#34d399", "rgba(52,211,153,0.15)"],
+    pivot: ["Pivot", "#fbbf24", "rgba(251,191,36,0.15)"],
+    partition: ["Partition", "#38bdf8", "rgba(56,189,248,0.12)"],
+    idle: ["Start", "#6666aa", "rgba(100,100,170,0.12)"],
   };
   const badge = step ? BADGE[step.type] : null;
 
   return (
     <div className="app">
-      {/* ── Header ── */}
       <header className="app-header">
         <div className="header-content">
           <div className="logo">
@@ -63,19 +66,21 @@ export default function App() {
             <span className="logo-bracket">{`}`}</span>
           </div>
 
-          {/* Section nav */}
           <nav className="section-nav">
             <button
               className={`section-btn ${section === "sorting" ? "active" : ""}`}
               onClick={() => setSection("sorting")}
-            >Sorting</button>
+            >
+              Sorting
+            </button>
             <button
               className={`section-btn ${section === "trees" ? "active" : ""}`}
               onClick={() => setSection("trees")}
-            >Trees</button>
+            >
+              Trees
+            </button>
           </nav>
 
-          {/* Sorting sub-selector (only when on sorting) */}
           {section === "sorting" && (
             <>
               <AlgorithmSelector selectedId={selectedId} onSelect={selectAlgorithm} />
@@ -89,7 +94,6 @@ export default function App() {
       </header>
 
       <main className="app-main">
-        {/* ── Sorting section ── */}
         {section === "sorting" && (
           <>
             <p className="algo-description">{algo.description}</p>
@@ -109,15 +113,16 @@ export default function App() {
                 <ArrayVisualizer step={step} inputArray={inputArray} />
                 <div className="legend">
                   {[
-                    ["var(--bar-default)",   "Default"],
-                    ["var(--bar-compare)",   "Comparing"],
-                    ["var(--bar-swap)",      "Swapping"],
-                    ["var(--bar-pivot)",     "Pivot"],
+                    ["var(--bar-default)", "Default"],
+                    ["var(--bar-compare)", "Comparing"],
+                    ["var(--bar-swap)", "Swapping"],
+                    ["var(--bar-pivot)", "Pivot"],
                     ["var(--bar-partition)", "In range"],
-                    ["var(--bar-sorted)",    "Sorted"],
+                    ["var(--bar-sorted)", "Sorted"],
                   ].map(([c, l]) => (
                     <div key={l} className="legend-item">
-                      <span className="legend-dot" style={{ background: c }} />{l}
+                      <span className="legend-dot" style={{ background: c }} />
+                      {l}
                     </div>
                   ))}
                 </div>
@@ -137,14 +142,18 @@ export default function App() {
               totalSteps={steps.length}
               speed={speed}
               hasSteps={steps.length > 0}
-              onPlay={play} onPause={pause} onNext={nextStep}
-              onPrev={prevStep} onReset={reset} onRun={runAlgorithm}
-              onGenerate={() => generateRandom(12)} onSpeedChange={setSpeed}
+              onPlay={play}
+              onPause={pause}
+              onNext={nextStep}
+              onPrev={prevStep}
+              onReset={reset}
+              onRun={runAlgorithm}
+              onGenerate={() => generateRandom(12)}
+              onSpeedChange={setSpeed}
             />
           </>
         )}
 
-        {/* ── Trees section ── */}
         {section === "trees" && (
           <>
             <p className="algo-description">

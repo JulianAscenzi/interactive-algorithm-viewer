@@ -3,18 +3,19 @@ export type BSTStepType =
   | "compare-left"
   | "compare-right"
   | "insert"
+  | "duplicate"
   | "found"
   | "not-found"
   | "visiting";
 
 export interface BSTNode {
-  id: number;       // unique id
+  id: number;
   value: number;
-  left: number | null;   // child node id
+  left: number | null;
   right: number | null;
 }
 
-// Flat map of id → node (easier to clone & diff)
+// Flat map of id -> node (easier to clone and diff).
 export type BSTTree = Record<number, BSTNode>;
 
 export interface BSTStep {
@@ -22,7 +23,7 @@ export interface BSTStep {
   rootId: number | null;
   activeNodeId: number | null;
   newNodeId: number | null;
-  highlightPath: number[];   // ids of nodes visited so far
+  highlightPath: number[];
   type: BSTStepType;
   description: string;
   highlightLine: number;
@@ -37,7 +38,7 @@ export const BST_INSERT_CODE = [
   "  if (value < node.value) {",           // 4
   "    node.left = insert(",               // 5
   "      node.left, value)",               // 6
-  "  } else if (value > node.value) {",   // 7
+  "  } else if (value > node.value) {",    // 7
   "    node.right = insert(",              // 8
   "      node.right, value)",              // 9
   "  }",                                   // 10
@@ -59,18 +60,16 @@ export const BST_SEARCH_CODE = [
   "}",                                     // 10
 ];
 
-// ── Tree builder ─────────────────────────────────────────────
-
 let _nextId = 1;
-function freshId() { return _nextId++; }
+function freshId() {
+  return _nextId++;
+}
 
 function cloneTree(tree: BSTTree): BSTTree {
   return Object.fromEntries(
-    Object.entries(tree).map(([k, v]) => [k, { ...v }])
+    Object.entries(tree).map(([k, v]) => [k, { ...v }]),
   );
 }
-
-// ── Insert steps ─────────────────────────────────────────────
 
 export function bstInsertSteps(
   initialTree: BSTTree,
@@ -111,7 +110,6 @@ export function bstInsertSteps(
       const id = freshId();
       tree[id] = { id, value, left: null, right: null };
       newNodeId = id;
-      // We don't snap here anymore, we'll snap in the caller after linking
       return id;
     }
 
@@ -119,29 +117,27 @@ export function bstInsertSteps(
     path.push(nodeId);
 
     if (value < node.value) {
-      snap("compare-left", `${value} < ${node.value} → go left`, 4, nodeId);
+      snap("compare-left", `${value} < ${node.value} -> go left`, 4, nodeId);
       const childId = node.left;
       const newLeft = insertRec(childId);
       if (childId === null) {
-        // Just inserted a new leaf
         tree[nodeId] = { ...tree[nodeId], left: newLeft };
         snap("insert", `Node ${value} inserted as a new leaf.`, 2, newLeft);
       } else {
         tree[nodeId] = { ...tree[nodeId], left: newLeft };
       }
     } else if (value > node.value) {
-      snap("compare-right", `${value} > ${node.value} → go right`, 7, nodeId);
+      snap("compare-right", `${value} > ${node.value} -> go right`, 7, nodeId);
       const childId = node.right;
       const newRight = insertRec(childId);
       if (childId === null) {
-        // Just inserted a new leaf
         tree[nodeId] = { ...tree[nodeId], right: newRight };
         snap("insert", `Node ${value} inserted as a new leaf.`, 2, newRight);
       } else {
         tree[nodeId] = { ...tree[nodeId], right: newRight };
       }
     } else {
-      snap("found", `${value} already exists in the tree — skipping.`, 11, nodeId);
+      snap("duplicate", `${value} already exists in the tree; skipping insert.`, 11, nodeId);
     }
 
     return nodeId;
@@ -154,11 +150,15 @@ export function bstInsertSteps(
     insertRec(rootId);
   }
 
-  snap("idle", `Done. ${value} is now in the tree.`, 11, null);
+  const inserted = newNodeId !== null;
+  snap(
+    "idle",
+    inserted ? `Done. ${value} is now in the tree.` : `Done. ${value} was already in the tree.`,
+    11,
+    null,
+  );
   return steps;
 }
-
-// ── Search steps ─────────────────────────────────────────────
 
 export function bstSearchSteps(
   tree: BSTTree,
@@ -186,22 +186,24 @@ export function bstSearchSteps(
 
   function searchRec(nodeId: number | null) {
     if (nodeId === null) {
-      snap("not-found", `Reached null → ${value} is NOT in the tree.`, 1, null);
+      snap("not-found", `Reached null -> ${value} is NOT in the tree.`, 1, null);
       return;
     }
+
     const node = tree[nodeId];
     path.push(nodeId);
     snap("visiting", `Visiting node ${node.value}`, 2, nodeId);
 
     if (node.value === value) {
-      snap("found", `Found ${value}! ✓`, 3, nodeId);
+      snap("found", `Found ${value}.`, 3, nodeId);
       return;
     }
+
     if (value < node.value) {
-      snap("compare-left", `${value} < ${node.value} → go left`, 5, nodeId);
+      snap("compare-left", `${value} < ${node.value} -> go left`, 5, nodeId);
       searchRec(node.left);
     } else {
-      snap("compare-right", `${value} > ${node.value} → go right`, 7, nodeId);
+      snap("compare-right", `${value} > ${node.value} -> go right`, 7, nodeId);
       searchRec(node.right);
     }
   }
@@ -209,8 +211,6 @@ export function bstSearchSteps(
   searchRec(rootId);
   return steps;
 }
-
-// ── Build a default starter tree ─────────────────────────────
 
 export function buildStarterTree(): { tree: BSTTree; rootId: number } {
   _nextId = 1;

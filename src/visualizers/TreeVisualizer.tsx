@@ -18,7 +18,7 @@ const NODE_R = 22;
 const LEVEL_H = 80;
 const SVG_W = 640;
 
-// Assign x positions using in-order traversal index
+// Assign x positions using in-order traversal index.
 function computeLayout(
   tree: BSTTree,
   rootId: number | null,
@@ -61,6 +61,7 @@ function getNodeColor(
       "compare-left":  { fill: "#2d1f6e", stroke: "#7c6af7", textColor: "#a78bfa" },
       "compare-right": { fill: "#2d1f6e", stroke: "#7c6af7", textColor: "#a78bfa" },
       "found":         { fill: "#065f46", stroke: "#34d399", textColor: "#6ee7b7" },
+      "duplicate":     { fill: "#3f300f", stroke: "#fbbf24", textColor: "#fde68a" },
       "not-found":     { fill: "#4c1d1d", stroke: "#f87171", textColor: "#fca5a5" },
       "visiting":      { fill: "#1e2a3a", stroke: "#38bdf8", textColor: "#7dd3fc" },
       "insert":        { fill: "#065f46", stroke: "#34d399", textColor: "#6ee7b7" },
@@ -178,7 +179,7 @@ export function TreeVisualizer({ step, tree, rootId }: TreeVisualizerProps) {
           <text x={SVG_W / 2} y={60} textAnchor="middle"
             fontSize={13} fill="#44445a"
             fontFamily="'JetBrains Mono', monospace">
-            Tree is empty — insert a value to begin
+            Tree is empty; insert a value to begin
           </text>
         )}
       </svg>
