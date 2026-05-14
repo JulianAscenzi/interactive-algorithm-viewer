@@ -1,6 +1,6 @@
 import { bubbleSort, BUBBLE_SORT_CODE } from "./sorting/bubbleSort";
 import { quickSort, QUICK_SORT_CODE } from "./sorting/quickSort";
-import type { Step } from "./sorting/bubbleSort";
+import type { Step } from "./sorting/types";
 
 export type { Step };
 
