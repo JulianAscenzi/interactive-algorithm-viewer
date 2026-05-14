@@ -6,13 +6,18 @@ import {
 } from "../algorithms/trees/bst";
 import { TreeVisualizer } from "../visualizers/TreeVisualizer";
 import { CodeHighlighter } from "../components/CodeHighlighter";
+import {
+  PlaybackControls,
+  playbackButtonClass,
+  playbackPrimaryButtonClass,
+} from "../components/PlaybackControls";
 import styles from "./BSTPage.module.css";
 
-const SPEEDS = [
-  { label: "0.5x", ms: 900 },
-  { label: "1x", ms: 500 },
-  { label: "2x", ms: 220 },
-  { label: "4x", ms: 80 },
+const SPEED_OPTIONS = [
+  { label: "0.5x", value: 900 },
+  { label: "1x", value: 500 },
+  { label: "2x", value: 220 },
+  { label: "4x", value: 80 },
 ];
 
 const BADGE: Record<string, [string, string, string]> = {
@@ -41,8 +46,6 @@ export default function BSTPage() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const step = steps.length > 0 ? steps[cur] : null;
-  const isFinished = steps.length > 0 && cur >= steps.length - 1;
-  const progress = steps.length > 1 ? (cur / (steps.length - 1)) * 100 : 0;
   const code = mode === "insert" ? BST_INSERT_CODE : BST_SEARCH_CODE;
 
   useEffect(() => {
@@ -102,6 +105,13 @@ export default function BSTPage() {
   const badge = step ? BADGE[step.type] : null;
   const completedInsert = steps.some((s) => s.type === "insert");
   const completedDuplicate = steps.some((s) => s.type === "duplicate");
+  const doneLabel = mode === "insert"
+    ? completedDuplicate && !completedInsert
+      ? "Skipped"
+      : "Inserted"
+    : step?.type === "found"
+      ? "Found"
+      : "Not Found";
 
   useEffect(() => {
     return () => setPlaying(false);
@@ -139,13 +149,13 @@ export default function BSTPage() {
           onKeyDown={(e) => e.key === "Enter" && handleRun()}
         />
         <button
-          className={`${styles.btn} ${styles.btnPrimary}`}
+          className={`${playbackPrimaryButtonClass} ${styles.inputButton}`}
           onClick={handleRun}
           disabled={inputVal === "" || isNaN(parseInt(inputVal, 10))}
         >
           {mode === "insert" ? "Insert" : "Search"}
         </button>
-        <button className={styles.btn} onClick={handleReset}>
+        <button className={`${playbackButtonClass} ${styles.inputButton}`} onClick={handleReset}>
           Reset Tree
         </button>
       </div>
@@ -201,70 +211,20 @@ export default function BSTPage() {
       </div>
 
       {steps.length > 0 && (
-        <div className={styles.controlPanel}>
-          <div className={styles.stepInfo}>
-            <span className={styles.stepBadge}>Step {cur + 1} / {steps.length}</span>
-            {isFinished && (
-              <span className={styles.doneBadge}>
-                {mode === "insert"
-                  ? completedDuplicate && !completedInsert
-                    ? "Skipped"
-                    : "Inserted"
-                  : step?.type === "found"
-                    ? "Found"
-                    : "Not Found"}
-              </span>
-            )}
-          </div>
-          <div className={styles.progressBar}>
-            <div className={styles.progressFill} style={{ width: `${progress}%` }} />
-          </div>
-          <div className={styles.controlsRow}>
-            <button
-              className={`${styles.btn} ${styles.btnIcon}`}
-              onClick={() => { setPlaying(false); setCur(0); }}
-              disabled={cur === 0}
-            >
-              Start
-            </button>
-            <button
-              className={`${styles.btn} ${styles.btnIcon}`}
-              onClick={() => { setPlaying(false); setCur((c) => Math.max(0, c - 1)); }}
-              disabled={cur === 0}
-            >
-              Prev
-            </button>
-            <button
-              className={`${styles.btn} ${styles.btnIcon} ${styles.btnPlay}`}
-              onClick={() => setPlaying((p) => !p)}
-              disabled={isFinished}
-            >
-              {playing ? "Pause" : "Play"}
-            </button>
-            <button
-              className={`${styles.btn} ${styles.btnIcon}`}
-              onClick={() => { setPlaying(false); setCur((c) => Math.min(steps.length - 1, c + 1)); }}
-              disabled={isFinished}
-            >
-              Next
-            </button>
-            <div className={styles.divider} />
-            <div className={styles.speedRow}>
-              <span className={styles.speedLabel}>Speed</span>
-              <div className={styles.speedButtons}>
-                {SPEEDS.map((s) => (
-                  <button
-                    key={s.ms}
-                    className={`${styles.btn} ${styles.btnSpeed} ${speedMs === s.ms ? styles.active : ""}`}
-                    onClick={() => setSpeedMs(s.ms)}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+        <PlaybackControls
+          isPlaying={playing}
+          currentStep={cur}
+          totalSteps={steps.length}
+          speed={speedMs}
+          speedOptions={SPEED_OPTIONS}
+          doneLabel={doneLabel}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onNext={() => { setPlaying(false); setCur((c) => Math.min(steps.length - 1, c + 1)); }}
+          onPrev={() => { setPlaying(false); setCur((c) => Math.max(0, c - 1)); }}
+          onReset={() => { setPlaying(false); setCur(0); }}
+          onSpeedChange={setSpeedMs}
+        />
       )}
     </div>
   );

@@ -80,6 +80,10 @@
   border-color: var(--accent);
 }
 
+.inputButton {
+  flex: 0 0 auto;
+}
+
 .descriptionBar {
   display: flex;
   align-items: center;
@@ -155,148 +159,16 @@
   flex-shrink: 0;
 }
 
-.controlPanel {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.stepInfo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.stepBadge {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.doneBadge {
-  background: rgba(52, 211, 153, 0.15);
-  color: var(--green);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 5px;
-}
-
-.progressBar {
-  height: 3px;
-  background: var(--border);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.progressFill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 2px;
-  transition: width 0.2s ease;
-}
-
-.controlsRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.divider {
-  width: 1px;
-  height: 28px;
-  background: var(--border2);
-  margin: 0 4px;
-}
-
-.speedRow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.speedLabel {
-  font-size: 12px;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
-.speedButtons {
-  display: flex;
-  gap: 4px;
-}
-
-.btn {
-  border: 1px solid var(--border2);
-  background: var(--surface);
-  color: var(--text-primary);
-  border-radius: 8px;
-  font-family: "Syne", sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 8px 14px;
-  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
-  white-space: nowrap;
-}
-
-.btn:hover:not(:disabled) {
-  background: var(--border);
-  border-color: var(--border2);
-}
-
-.btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.btnPrimary,
-.btnPlay {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
-}
-
-.btnPrimary:hover:not(:disabled),
-.btnPlay:hover:not(:disabled) {
-  background: var(--accent2);
-  border-color: var(--accent2);
-}
-
-.btnIcon {
-  padding: 8px 12px;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-}
-
-.btnPlay {
-  min-width: 44px;
-}
-
-.btnSpeed {
-  padding: 5px 10px;
-  font-size: 12px;
-  border-radius: 6px;
-}
-
-.btnSpeed.active {
-  background: rgba(124, 106, 247, 0.2);
-  border-color: var(--accent);
-  color: var(--accent2);
-}
-
 @media (max-width: 760px) {
   .vizCodeLayout {
     grid-template-columns: 1fr;
   }
 
-  .bstInputRow .btn,
   .bstInput {
+    flex: 1 1 100%;
+  }
+
+  .inputButton {
     flex: 1 1 100%;
   }
 }
