@@ -1,0 +1,208 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.appHeader {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  background: var(--bg2);
+}
+
+.headerContent {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.logoBracket {
+  color: var(--accent);
+}
+
+.logoText {
+  color: var(--text-primary);
+}
+
+.sectionNav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sectionBtn {
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  font-family: "Syne", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.sectionBtn:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+.sectionBtn.active {
+  background: rgba(124, 106, 247, 0.15);
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+.complexityBadges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.cbadge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.time {
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--amber);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
+.space {
+  background: rgba(56, 189, 248, 0.1);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.appMain {
+  flex: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 28px 24px 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.algoDescription {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  padding: 0 2px;
+}
+
+.descriptionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  min-height: 48px;
+  gap: 12px;
+}
+
+.stepDescription {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-family: "JetBrains Mono", monospace;
+  flex: 1;
+}
+
+.stepTypeBadge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.vizCodeLayout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 16px;
+  align-items: start;
+}
+
+.vizPanel,
+.codePanel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.vizPanel {
+  padding-bottom: 8px;
+}
+
+.panelLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 12px 16px 0;
+}
+
+.visualizerSlot {
+  padding: 10px 14px 0;
+}
+
+.legend {
+  display: flex;
+  gap: 14px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 8px 16px 16px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+@media (max-width: 760px) {
+  .headerContent {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .complexityBadges {
+    margin-left: 0;
+  }
+
+  .vizCodeLayout {
+    grid-template-columns: 1fr;
+  }
+}

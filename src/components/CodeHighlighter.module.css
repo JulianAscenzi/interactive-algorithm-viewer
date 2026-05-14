@@ -1,0 +1,80 @@
+.codeHighlighter {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.codeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 8px;
+}
+
+.codeTitle {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.codeLang {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--surface);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.codeBody {
+  padding: 4px 0 16px;
+  overflow-y: auto;
+  max-height: 380px;
+}
+
+.codeLine {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 3px 14px 3px 0;
+  border-left: 2px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
+}
+
+.codeLine.active {
+  border-radius: 0 4px 4px 0;
+}
+
+.lineNumber {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 38px;
+  text-align: right;
+  padding-right: 14px;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.lineContent {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: pre;
+  flex: 1;
+  transition: color 0.15s;
+}
+
+.codeLine.active .lineContent {
+  font-weight: 600;
+}
+
+.lineArrow {
+  font-size: 10px;
+  margin-left: 8px;
+  flex-shrink: 0;
+  opacity: 0.8;
+}

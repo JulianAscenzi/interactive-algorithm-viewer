@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import styles from "./CodeHighlighter.module.css";
 
 interface CodeHighlighterProps {
   code: string[];
@@ -26,34 +27,33 @@ export function CodeHighlighter({ code, activeLine, stepType }: CodeHighlighterP
   const colors = LINE_COLORS[stepType] ?? LINE_COLORS.idle;
 
   return (
-    <div className="code-highlighter">
-      <div className="code-header">
-        <span className="code-title">Algorithm</span>
-        <span className="code-lang">JavaScript</span>
+    <div className={styles.codeHighlighter}>
+      <div className={styles.codeHeader}>
+        <span className={styles.codeTitle}>Algorithm</span>
+        <span className={styles.codeLang}>JavaScript</span>
       </div>
-      <div className="code-body">
+      <div className={styles.codeBody}>
         {code.map((line, i) => {
           const isActive = i === activeLine;
-          const indent = line.match(/^(\s*)/)?.[1].length ?? 0;
           return (
             <div
               key={i}
               ref={isActive ? activeRef : null}
-              className={`code-line ${isActive ? "active" : ""}`}
+              className={`${styles.codeLine} ${isActive ? styles.active : ""}`}
               style={isActive ? {
                 background: colors.bg,
                 borderLeft: `2px solid ${colors.border}`,
               } : {}}
             >
-              <span className="line-number">{i + 1}</span>
+              <span className={styles.lineNumber}>{i + 1}</span>
               <span
-                className="line-content"
+                className={styles.lineContent}
                 style={isActive ? { color: colors.text } : {}}
               >
                 {line}
               </span>
               {isActive && (
-                <span className="line-arrow" style={{ color: colors.border }}>{"<"}</span>
+                <span className={styles.lineArrow} style={{ color: colors.border }}>{"<"}</span>
               )}
             </div>
           );

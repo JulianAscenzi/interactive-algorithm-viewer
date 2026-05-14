@@ -6,6 +6,7 @@ import {
 } from "../algorithms/trees/bst";
 import { TreeVisualizer } from "../visualizers/TreeVisualizer";
 import { CodeHighlighter } from "../components/CodeHighlighter";
+import styles from "./BSTPage.module.css";
 
 const SPEEDS = [
   { label: "0.5x", ms: 900 },
@@ -107,28 +108,28 @@ export default function BSTPage() {
   }, []);
 
   return (
-    <div className="bst-page">
-      <div className="bst-tabs">
+    <div className={styles.bstPage}>
+      <div className={styles.bstTabs}>
         <button
-          className={`bst-tab ${mode === "insert" ? "active" : ""}`}
+          className={`${styles.bstTab} ${mode === "insert" ? styles.active : ""}`}
           onClick={() => handleModeSwitch("insert")}
         >
           <span>Insert</span>
           <code>O(h)</code>
         </button>
         <button
-          className={`bst-tab ${mode === "search" ? "active" : ""}`}
+          className={`${styles.bstTab} ${mode === "search" ? styles.active : ""}`}
           onClick={() => handleModeSwitch("search")}
         >
           <span>Search</span>
           <code>O(h)</code>
         </button>
-        <div className="bst-tab-note">h = tree height</div>
+        <div className={styles.bstTabNote}>h = tree height</div>
       </div>
 
-      <div className="bst-input-row">
+      <div className={styles.bstInputRow}>
         <input
-          className="bst-input"
+          className={styles.bstInput}
           type="number"
           min={0}
           max={999}
@@ -138,19 +139,19 @@ export default function BSTPage() {
           onKeyDown={(e) => e.key === "Enter" && handleRun()}
         />
         <button
-          className="btn btn-primary"
+          className={`${styles.btn} ${styles.btnPrimary}`}
           onClick={handleRun}
           disabled={inputVal === "" || isNaN(parseInt(inputVal, 10))}
         >
           {mode === "insert" ? "Insert" : "Search"}
         </button>
-        <button className="btn btn-secondary" onClick={handleReset}>
+        <button className={styles.btn} onClick={handleReset}>
           Reset Tree
         </button>
       </div>
 
-      <div className="description-bar">
-        <span className="step-description">
+      <div className={styles.descriptionBar}>
+        <span className={styles.stepDescription}>
           {step
             ? step.description
             : mode === "insert"
@@ -158,19 +159,19 @@ export default function BSTPage() {
               : "Enter a value and press Search to trace the lookup path."}
         </span>
         {badge && (
-          <span className="step-type-badge" style={{ color: badge[1], background: badge[2] }}>
+          <span className={styles.stepTypeBadge} style={{ color: badge[1], background: badge[2] }}>
             {badge[0]}
           </span>
         )}
       </div>
 
-      <div className="viz-code-layout">
-        <div className="viz-panel">
-          <div className="panel-label">Binary Search Tree</div>
-          <div style={{ padding: "12px 10px 8px" }}>
+      <div className={styles.vizCodeLayout}>
+        <div className={styles.vizPanel}>
+          <div className={styles.panelLabel}>Binary Search Tree</div>
+          <div className={styles.treeSlot}>
             <TreeVisualizer step={step} tree={tree} rootId={rootId} />
           </div>
-          <div className="legend" style={{ padding: "0 16px 16px" }}>
+          <div className={styles.legend}>
             {[
               ["#1a1a28", "#2e2e44", "Default"],
               ["#2d1f6e", "#7c6af7", "Comparing"],
@@ -179,8 +180,8 @@ export default function BSTPage() {
               ["#3f300f", "#fbbf24", "Already Exists"],
               ["#4c1d1d", "#f87171", "Not Found"],
             ].map(([fill, stroke, label]) => (
-              <div key={label} className="legend-item">
-                <svg width="14" height="14" style={{ flexShrink: 0 }}>
+              <div key={label} className={styles.legendItem}>
+                <svg width="14" height="14" className={styles.legendIcon}>
                   <circle cx="7" cy="7" r="6" fill={fill} stroke={stroke} strokeWidth="1.5" />
                 </svg>
                 {label}
@@ -189,8 +190,8 @@ export default function BSTPage() {
           </div>
         </div>
 
-        <div className="code-panel">
-          <div className="panel-label">Code</div>
+        <div className={styles.codePanel}>
+          <div className={styles.panelLabel}>Code</div>
           <CodeHighlighter
             code={code}
             activeLine={step?.highlightLine ?? 0}
@@ -200,11 +201,11 @@ export default function BSTPage() {
       </div>
 
       {steps.length > 0 && (
-        <div className="control-panel">
-          <div className="step-info">
-            <span className="step-badge">Step {cur + 1} / {steps.length}</span>
+        <div className={styles.controlPanel}>
+          <div className={styles.stepInfo}>
+            <span className={styles.stepBadge}>Step {cur + 1} / {steps.length}</span>
             {isFinished && (
-              <span className="done-badge">
+              <span className={styles.doneBadge}>
                 {mode === "insert"
                   ? completedDuplicate && !completedInsert
                     ? "Skipped"
@@ -215,46 +216,46 @@ export default function BSTPage() {
               </span>
             )}
           </div>
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progress}%` }} />
+          <div className={styles.progressBar}>
+            <div className={styles.progressFill} style={{ width: `${progress}%` }} />
           </div>
-          <div className="controls-row">
+          <div className={styles.controlsRow}>
             <button
-              className="btn btn-icon"
+              className={`${styles.btn} ${styles.btnIcon}`}
               onClick={() => { setPlaying(false); setCur(0); }}
               disabled={cur === 0}
             >
               Start
             </button>
             <button
-              className="btn btn-icon"
+              className={`${styles.btn} ${styles.btnIcon}`}
               onClick={() => { setPlaying(false); setCur((c) => Math.max(0, c - 1)); }}
               disabled={cur === 0}
             >
               Prev
             </button>
             <button
-              className="btn btn-icon btn-play"
+              className={`${styles.btn} ${styles.btnIcon} ${styles.btnPlay}`}
               onClick={() => setPlaying((p) => !p)}
               disabled={isFinished}
             >
               {playing ? "Pause" : "Play"}
             </button>
             <button
-              className="btn btn-icon"
+              className={`${styles.btn} ${styles.btnIcon}`}
               onClick={() => { setPlaying(false); setCur((c) => Math.min(steps.length - 1, c + 1)); }}
               disabled={isFinished}
             >
               Next
             </button>
-            <div className="divider" />
-            <div className="speed-row" style={{ margin: 0 }}>
-              <span className="speed-label">Speed</span>
-              <div className="speed-buttons">
+            <div className={styles.divider} />
+            <div className={styles.speedRow}>
+              <span className={styles.speedLabel}>Speed</span>
+              <div className={styles.speedButtons}>
                 {SPEEDS.map((s) => (
                   <button
                     key={s.ms}
-                    className={`btn btn-speed ${speedMs === s.ms ? "active" : ""}`}
+                    className={`${styles.btn} ${styles.btnSpeed} ${speedMs === s.ms ? styles.active : ""}`}
                     onClick={() => setSpeedMs(s.ms)}
                   >
                     {s.label}

@@ -1,5 +1,6 @@
 import React from "react";
 import { ALGORITHMS, AlgorithmMeta } from "../algorithms";
+import styles from "./AlgorithmSelector.module.css";
 
 interface AlgorithmSelectorProps {
   selectedId: string;
@@ -8,15 +9,15 @@ interface AlgorithmSelectorProps {
 
 export function AlgorithmSelector({ selectedId, onSelect }: AlgorithmSelectorProps) {
   return (
-    <div className="algo-selector">
+    <div className={styles.algoSelector}>
       {ALGORITHMS.map((algo: AlgorithmMeta) => (
         <button
           key={algo.id}
-          className={`algo-btn ${selectedId === algo.id ? "active" : ""}`}
+          className={`${styles.algoBtn} ${selectedId === algo.id ? styles.active : ""}`}
           onClick={() => onSelect(algo.id)}
         >
-          <span className="algo-btn-name">{algo.name}</span>
-          <span className="algo-btn-complexity">{algo.complexity.time}</span>
+          <span className={styles.algoBtnName}>{algo.name}</span>
+          <span className={styles.algoBtnComplexity}>{algo.complexity.time}</span>
         </button>
       ))}
     </div>

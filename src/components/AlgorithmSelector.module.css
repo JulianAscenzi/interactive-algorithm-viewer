@@ -1,0 +1,48 @@
+.algoSelector {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.algoBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: "Syne", sans-serif;
+}
+
+.algoBtn:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+.algoBtn.active {
+  background: rgba(124, 106, 247, 0.15);
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+.algoBtnName {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.algoBtnComplexity {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--amber);
+  line-height: 1;
+}
+
+.algoBtn.active .algoBtnComplexity {
+  color: var(--amber);
+}

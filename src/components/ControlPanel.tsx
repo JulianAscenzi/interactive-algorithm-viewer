@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./ControlPanel.module.css";
 
 interface ControlPanelProps {
   isPlaying: boolean;
@@ -42,35 +43,35 @@ export function ControlPanel({
   const progress = totalSteps > 1 ? (currentStep / (totalSteps - 1)) * 100 : 0;
 
   return (
-    <div className="control-panel">
-      <div className="step-info">
-        <span className="step-badge">
+    <div className={styles.controlPanel}>
+      <div className={styles.stepInfo}>
+        <span className={styles.stepBadge}>
           {hasSteps ? `Step ${currentStep + 1} / ${totalSteps}` : "Ready to start"}
         </span>
-        {isFinished && <span className="done-badge">Sorted</span>}
+        {isFinished && <span className={styles.doneBadge}>Sorted</span>}
       </div>
 
       {hasSteps && (
-        <div className="progress-bar">
+        <div className={styles.progressBar}>
           <div
-            className="progress-fill"
+            className={styles.progressFill}
             style={{ width: `${progress}%` }}
           />
         </div>
       )}
 
-      <div className="controls-row">
-        <button className="btn btn-secondary" onClick={onGenerate} title="Generate random array">
+      <div className={styles.controlsRow}>
+        <button className={styles.btn} onClick={onGenerate} title="Generate random array">
           New
         </button>
-        <button className="btn btn-primary" onClick={onRun}>
+        <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={onRun}>
           {hasSteps ? "Restart" : "Run"}
         </button>
 
-        <div className="divider" />
+        <div className={styles.divider} />
 
         <button
-          className="btn btn-icon"
+          className={`${styles.btn} ${styles.btnIcon}`}
           onClick={onPrev}
           disabled={!hasSteps || currentStep === 0}
           title="Previous step"
@@ -79,7 +80,7 @@ export function ControlPanel({
         </button>
 
         <button
-          className="btn btn-icon btn-play"
+          className={`${styles.btn} ${styles.btnIcon} ${styles.btnPlay}`}
           onClick={isPlaying ? onPause : onPlay}
           disabled={!hasSteps || isFinished}
           title={isPlaying ? "Pause" : "Play"}
@@ -88,7 +89,7 @@ export function ControlPanel({
         </button>
 
         <button
-          className="btn btn-icon"
+          className={`${styles.btn} ${styles.btnIcon}`}
           onClick={onNext}
           disabled={!hasSteps || isFinished}
           title="Next step"
@@ -97,7 +98,7 @@ export function ControlPanel({
         </button>
 
         <button
-          className="btn btn-icon"
+          className={`${styles.btn} ${styles.btnIcon}`}
           onClick={onReset}
           disabled={!hasSteps || currentStep === 0}
           title="Go to start"
@@ -106,13 +107,13 @@ export function ControlPanel({
         </button>
       </div>
 
-      <div className="speed-row">
-        <span className="speed-label">Speed</span>
-        <div className="speed-buttons">
+      <div className={styles.speedRow}>
+        <span className={styles.speedLabel}>Speed</span>
+        <div className={styles.speedButtons}>
           {SPEED_OPTIONS.map((opt) => (
             <button
               key={opt.value}
-              className={`btn btn-speed ${speed === opt.value ? "active" : ""}`}
+              className={`${styles.btn} ${styles.btnSpeed} ${speed === opt.value ? styles.active : ""}`}
               onClick={() => onSpeedChange(opt.value)}
             >
               {opt.label}

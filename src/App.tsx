@@ -6,6 +6,7 @@ import { ControlPanel } from "./components/ControlPanel";
 import { CodeHighlighter } from "./components/CodeHighlighter";
 import { AlgorithmSelector } from "./components/AlgorithmSelector";
 import BSTPage from "./pages/BSTPage";
+import styles from "./App.module.css";
 
 type Section = "sorting" | "trees";
 
@@ -57,24 +58,24 @@ export default function App() {
   const badge = step ? BADGE[step.type] : null;
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="header-content">
-          <div className="logo">
-            <span className="logo-bracket">{`{`}</span>
-            <span className="logo-text">algo</span>
-            <span className="logo-bracket">{`}`}</span>
+    <div className={styles.app}>
+      <header className={styles.appHeader}>
+        <div className={styles.headerContent}>
+          <div className={styles.logo}>
+            <span className={styles.logoBracket}>{`{`}</span>
+            <span className={styles.logoText}>algo</span>
+            <span className={styles.logoBracket}>{`}`}</span>
           </div>
 
-          <nav className="section-nav">
+          <nav className={styles.sectionNav}>
             <button
-              className={`section-btn ${section === "sorting" ? "active" : ""}`}
+              className={`${styles.sectionBtn} ${section === "sorting" ? styles.active : ""}`}
               onClick={() => setSection("sorting")}
             >
               Sorting
             </button>
             <button
-              className={`section-btn ${section === "trees" ? "active" : ""}`}
+              className={`${styles.sectionBtn} ${section === "trees" ? styles.active : ""}`}
               onClick={() => setSection("trees")}
             >
               Trees
@@ -84,34 +85,36 @@ export default function App() {
           {section === "sorting" && (
             <>
               <AlgorithmSelector selectedId={selectedId} onSelect={selectAlgorithm} />
-              <div className="complexity-badges">
-                <span className="cbadge time">{algo.complexity.time}</span>
-                <span className="cbadge space">{algo.complexity.space} space</span>
+              <div className={styles.complexityBadges}>
+                <span className={`${styles.cbadge} ${styles.time}`}>{algo.complexity.time}</span>
+                <span className={`${styles.cbadge} ${styles.space}`}>{algo.complexity.space} space</span>
               </div>
             </>
           )}
         </div>
       </header>
 
-      <main className="app-main">
+      <main className={styles.appMain}>
         {section === "sorting" && (
           <>
-            <p className="algo-description">{algo.description}</p>
-            <div className="description-bar">
-              <span className="step-description">
+            <p className={styles.algoDescription}>{algo.description}</p>
+            <div className={styles.descriptionBar}>
+              <span className={styles.stepDescription}>
                 {step ? step.description : "Generate an array and press Run to start the visualization."}
               </span>
               {badge && (
-                <span className="step-type-badge" style={{ color: badge[1], background: badge[2] }}>
+                <span className={styles.stepTypeBadge} style={{ color: badge[1], background: badge[2] }}>
                   {badge[0]}
                 </span>
               )}
             </div>
-            <div className="viz-code-layout">
-              <div className="viz-panel">
-                <div className="panel-label">Array</div>
-                <ArrayVisualizer step={step} inputArray={inputArray} />
-                <div className="legend">
+            <div className={styles.vizCodeLayout}>
+              <div className={styles.vizPanel}>
+                <div className={styles.panelLabel}>Array</div>
+                <div className={styles.visualizerSlot}>
+                  <ArrayVisualizer step={step} inputArray={inputArray} />
+                </div>
+                <div className={styles.legend}>
                   {[
                     ["var(--bar-default)", "Default"],
                     ["var(--bar-compare)", "Comparing"],
@@ -120,15 +123,15 @@ export default function App() {
                     ["var(--bar-partition)", "In range"],
                     ["var(--bar-sorted)", "Sorted"],
                   ].map(([c, l]) => (
-                    <div key={l} className="legend-item">
-                      <span className="legend-dot" style={{ background: c }} />
+                    <div key={l} className={styles.legendItem}>
+                      <span className={styles.legendDot} style={{ background: c }} />
                       {l}
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="code-panel">
-                <div className="panel-label">Code</div>
+              <div className={styles.codePanel}>
+                <div className={styles.panelLabel}>Code</div>
                 <CodeHighlighter
                   code={algo.code}
                   activeLine={step?.highlightLine ?? 0}
@@ -156,7 +159,7 @@ export default function App() {
 
         {section === "trees" && (
           <>
-            <p className="algo-description">
+            <p className={styles.algoDescription}>
               A Binary Search Tree maintains the invariant: left child &lt; parent &lt; right child.
               Insert values to build the tree, or search to trace the lookup path step by step.
             </p>
