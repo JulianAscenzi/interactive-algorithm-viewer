@@ -14,6 +14,9 @@ interface PlaybackControlsProps {
   speedOptions: SpeedOption[];
   doneLabel?: string;
   emptyLabel?: string;
+  statusLabel?: string;
+  secondaryInfo?: string;
+  progressLabel?: string;
   leadingActions?: React.ReactNode;
   showProgressWhenEmpty?: boolean;
   onPlay: () => void;
@@ -35,6 +38,9 @@ export function PlaybackControls({
   speedOptions,
   doneLabel,
   emptyLabel = "Ready to start",
+  statusLabel,
+  secondaryInfo,
+  progressLabel,
   leadingActions,
   showProgressWhenEmpty = false,
   onPlay,
@@ -48,26 +54,31 @@ export function PlaybackControls({
   const isFinished = hasSteps && totalSteps > 1 && currentStep >= totalSteps - 1;
   const progress = totalSteps > 1 ? (currentStep / (totalSteps - 1)) * 100 : 0;
   const showProgress = hasSteps || showProgressWhenEmpty;
+  const playbackState = isFinished ? "Finished" : isPlaying ? "Playing" : hasSteps ? "Paused" : "Ready";
+  const stepLabel = hasSteps ? `Step ${currentStep + 1} / ${totalSteps}` : emptyLabel;
 
   return (
     <div className={styles.controlPanel}>
       <div className={styles.stepInfo}>
-        <span className={styles.stepBadge}>
-          {hasSteps ? `Step ${currentStep + 1} / ${totalSteps}` : emptyLabel}
-        </span>
+        <span className={styles.stateBadge}>{statusLabel ?? playbackState}</span>
+        <span className={styles.stepBadge}>{stepLabel}</span>
         {isFinished && doneLabel && <span className={styles.doneBadge}>{doneLabel}</span>}
       </div>
+      {secondaryInfo && <p className={styles.secondaryInfo}>{secondaryInfo}</p>}
 
       {showProgress && (
-        <div
-          className={styles.progressBar}
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={totalSteps > 1 ? totalSteps - 1 : 0}
-          aria-valuenow={hasSteps ? currentStep : 0}
-          aria-label="Visualization progress"
-        >
-          <div className={styles.progressFill} style={{ width: `${progress}%` }} />
+        <div className={styles.progressWrap}>
+          <div
+            className={styles.progressBar}
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={totalSteps > 1 ? totalSteps - 1 : 0}
+            aria-valuenow={hasSteps ? currentStep : 0}
+            aria-label={progressLabel ?? "Visualization progress"}
+          >
+            <div className={styles.progressFill} style={{ width: `${progress}%` }} />
+          </div>
+          <span className={styles.progressText}>{Math.round(progress)}%</span>
         </div>
       )}
 

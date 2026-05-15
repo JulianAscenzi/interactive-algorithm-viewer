@@ -4,13 +4,17 @@ import {
   playbackButtonClass,
   playbackPrimaryButtonClass,
 } from "./PlaybackControls";
+import styles from "./PlaybackControls.module.css";
 
 interface ControlPanelProps {
   isPlaying: boolean;
   currentStep: number;
   totalSteps: number;
   speed: number;
+  arraySize: number;
   hasSteps: boolean;
+  statusLabel?: string;
+  secondaryInfo?: string;
   onPlay: () => void;
   onPause: () => void;
   onNext: () => void;
@@ -18,6 +22,7 @@ interface ControlPanelProps {
   onReset: () => void;
   onRun: () => void;
   onGenerate: () => void;
+  onArraySizeChange: (size: number) => void;
   onSpeedChange: (speed: number) => void;
 }
 
@@ -28,12 +33,17 @@ const SPEED_OPTIONS = [
   { label: "4x", value: 80 },
 ];
 
+const ARRAY_SIZE_OPTIONS = [8, 12, 20, 32];
+
 export function ControlPanel({
   isPlaying,
   currentStep,
   totalSteps,
   speed,
+  arraySize,
   hasSteps,
+  statusLabel,
+  secondaryInfo,
   onPlay,
   onPause,
   onNext,
@@ -41,6 +51,7 @@ export function ControlPanel({
   onReset,
   onRun,
   onGenerate,
+  onArraySizeChange,
   onSpeedChange,
 }: ControlPanelProps) {
   return (
@@ -51,6 +62,8 @@ export function ControlPanel({
       speed={speed}
       speedOptions={SPEED_OPTIONS}
       doneLabel="Sorted"
+      statusLabel={statusLabel}
+      secondaryInfo={secondaryInfo}
       onPlay={onPlay}
       onPause={onPause}
       onNext={onNext}
@@ -65,6 +78,20 @@ export function ControlPanel({
           <button className={playbackPrimaryButtonClass} onClick={onRun}>
             {hasSteps ? "Restart" : "Run"}
           </button>
+          <div className={styles.inlineGroup} role="group" aria-label="Array size">
+            {ARRAY_SIZE_OPTIONS.map((size) => (
+              <button
+                key={size}
+                className={playbackButtonClass}
+                onClick={() => onArraySizeChange(size)}
+                aria-pressed={arraySize === size}
+                aria-label={`Array size ${size}`}
+                title={`Use ${size} values`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
         </>
       )}
     />

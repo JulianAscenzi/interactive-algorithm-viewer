@@ -22,13 +22,13 @@ const SPEED_OPTIONS = [
 
 const BADGE: Record<string, [string, string, string]> = {
   idle: ["Ready", "#6666aa", "rgba(100,100,170,0.12)"],
-  "compare-left": ["Go left", "#7c6af7", "rgba(124,106,247,0.15)"],
-  "compare-right": ["Go right", "#7c6af7", "rgba(124,106,247,0.15)"],
+  "compare-left": ["Compare", "#7c6af7", "rgba(124,106,247,0.15)"],
+  "compare-right": ["Compare", "#7c6af7", "rgba(124,106,247,0.15)"],
   insert: ["Inserted", "#34d399", "rgba(52,211,153,0.15)"],
-  duplicate: ["Already Exists", "#fbbf24", "rgba(251,191,36,0.15)"],
+  duplicate: ["Duplicate", "#fbbf24", "rgba(251,191,36,0.15)"],
   found: ["Found", "#34d399", "rgba(52,211,153,0.15)"],
-  "not-found": ["Not Found", "#f87171", "rgba(248,113,113,0.15)"],
-  visiting: ["Visiting", "#38bdf8", "rgba(56,189,248,0.12)"],
+  "not-found": ["Not found", "#f87171", "rgba(248,113,113,0.15)"],
+  visiting: ["Visit", "#38bdf8", "rgba(56,189,248,0.12)"],
 };
 
 type Mode = "insert" | "search";
@@ -41,6 +41,36 @@ function parseBSTInput(value: string): number | null {
   if (!Number.isInteger(parsed) || parsed < 0 || parsed > 999) return null;
 
   return parsed;
+}
+
+function getBSTStepDetails(step: BSTStep | null, currentStep: number, totalSteps: number): string {
+  if (!step) return "Enter a value to trace every comparison through the tree.";
+
+  const progress = totalSteps > 0 ? `Step ${currentStep + 1} of ${totalSteps}` : "No steps yet";
+  const activeValue = step.activeNodeId !== null ? step.tree[step.activeNodeId]?.value : null;
+  if (step.type === "compare-left" || step.type === "compare-right") {
+    const direction = step.type === "compare-left" ? "left" : "right";
+    return `${progress}. Target ${step.targetValue} is compared with ${activeValue}; follow the ${direction} child next.`;
+  }
+  if (step.type === "visiting") {
+    return `${progress}. Visiting ${activeValue}; the next comparison decides the branch.`;
+  }
+  if (step.type === "insert") {
+    return `${progress}. ${step.targetValue} becomes a new leaf and the tree invariant still holds.`;
+  }
+  if (step.type === "duplicate") {
+    return `${progress}. ${step.targetValue} already exists, so the tree does not change.`;
+  }
+  if (step.type === "found") return `${progress}. Search succeeded at node ${activeValue}.`;
+  if (step.type === "not-found") return `${progress}. Search reached an empty child, so ${step.targetValue} is absent.`;
+  return `${progress}. Starting from the root.`;
+}
+
+function getBSTPlaybackStatus(playing: boolean, step: BSTStep | null, currentStep: number, totalSteps: number): string {
+  if (!step) return "Ready";
+  if (totalSteps > 1 && currentStep >= totalSteps - 1) return "Finished";
+  if (playing) return "Playing";
+  return BADGE[step.type]?.[0] ?? "Paused";
 }
 
 export default function BSTPage() {
@@ -118,6 +148,8 @@ export default function BSTPage() {
   }
 
   const badge = step ? BADGE[step.type] : null;
+  const stepDetails = getBSTStepDetails(step, cur, steps.length);
+  const playbackStatus = getBSTPlaybackStatus(playing, step, cur, steps.length);
   const completedInsert = steps.some((s) => s.type === "insert");
   const completedDuplicate = steps.some((s) => s.type === "duplicate");
   const doneLabel = mode === "insert"
@@ -242,6 +274,8 @@ export default function BSTPage() {
           speed={speedMs}
           speedOptions={SPEED_OPTIONS}
           doneLabel={doneLabel}
+          statusLabel={playbackStatus}
+          secondaryInfo={stepDetails}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
           onNext={() => { setPlaying(false); setCur((c) => Math.min(steps.length - 1, c + 1)); }}

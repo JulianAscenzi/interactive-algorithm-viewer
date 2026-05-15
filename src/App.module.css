@@ -16,6 +16,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .logo {
@@ -116,7 +117,7 @@
   justify-content: space-between;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 12px 16px;
   min-height: 48px;
   gap: 12px;
@@ -148,7 +149,7 @@
 .codePanel {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -195,7 +196,15 @@
 @media (max-width: 760px) {
   .headerContent {
     align-items: flex-start;
-    flex-wrap: wrap;
+  }
+
+  .sectionNav {
+    order: 2;
+    width: 100%;
+  }
+
+  .sectionBtn {
+    flex: 1 1 0;
   }
 
   .complexityBadges {
@@ -204,5 +213,32 @@
 
   .vizCodeLayout {
     grid-template-columns: 1fr;
+  }
+
+  .descriptionBar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .stepTypeBadge {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .appHeader {
+    padding: 14px 16px;
+  }
+
+  .appMain {
+    padding: 20px 16px 28px;
+  }
+
+  .legend {
+    gap: 8px;
+  }
+
+  .legendItem {
+    flex: 1 1 120px;
   }
 }

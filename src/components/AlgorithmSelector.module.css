@@ -14,9 +14,18 @@
   color: var(--text-secondary);
   border-radius: 8px;
   padding: 7px 14px;
+  min-height: 44px;
   cursor: pointer;
   transition: all 0.15s;
   font-family: "Syne", sans-serif;
+}
+
+@media (max-width: 520px) {
+  .algoSelector {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .algoBtn:hover {

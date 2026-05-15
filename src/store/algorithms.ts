@@ -1,12 +1,15 @@
 import { create } from "zustand";
 import { Step, getAlgorithm, ALGORITHMS } from "../algorithms";
 
+const DEFAULT_ARRAY_SIZE = 12;
+
 interface AlgorithmStore {
   // Selection
   selectedId: string;
 
   // Data
   inputArray: number[];
+  arraySize: number;
   steps: Step[];
   currentStep: number;
 
@@ -17,6 +20,7 @@ interface AlgorithmStore {
   // Actions
   selectAlgorithm: (id: string) => void;
   generateRandom: (size?: number) => void;
+  setArraySize: (size: number) => void;
   runAlgorithm: () => void;
   nextStep: () => void;
   prevStep: () => void;
@@ -26,13 +30,14 @@ interface AlgorithmStore {
   setSpeed: (speed: number) => void;
 }
 
-function randomArray(size = 12): number[] {
+function randomArray(size = DEFAULT_ARRAY_SIZE): number[] {
   return Array.from({ length: size }, () => Math.floor(Math.random() * 80) + 15);
 }
 
 export const useAlgorithmStore = create<AlgorithmStore>((set, get) => ({
   selectedId: ALGORITHMS[0].id,
-  inputArray: randomArray(),
+  arraySize: DEFAULT_ARRAY_SIZE,
+  inputArray: randomArray(DEFAULT_ARRAY_SIZE),
   steps: [],
   currentStep: 0,
   isPlaying: false,
@@ -42,9 +47,15 @@ export const useAlgorithmStore = create<AlgorithmStore>((set, get) => ({
     set({ selectedId: id, steps: [], currentStep: 0, isPlaying: false });
   },
 
-  generateRandom: (size = 12) => {
+  generateRandom: (size) => {
+    const nextSize = size ?? get().arraySize;
+    const arr = randomArray(nextSize);
+    set({ arraySize: nextSize, inputArray: arr, steps: [], currentStep: 0, isPlaying: false });
+  },
+
+  setArraySize: (size) => {
     const arr = randomArray(size);
-    set({ inputArray: arr, steps: [], currentStep: 0, isPlaying: false });
+    set({ arraySize: size, inputArray: arr, steps: [], currentStep: 0, isPlaying: false });
   },
 
   runAlgorithm: () => {

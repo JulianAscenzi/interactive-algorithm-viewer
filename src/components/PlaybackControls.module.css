@@ -1,7 +1,7 @@
 .controlPanel {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -12,12 +12,30 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stateBadge {
+  background: rgba(124, 106, 247, 0.15);
+  border: 1px solid rgba(124, 106, 247, 0.3);
+  color: var(--accent2);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 6px;
 }
 
 .stepBadge {
   font-family: "JetBrains Mono", monospace;
   font-size: 12px;
   color: var(--text-muted);
+}
+
+.secondaryInfo {
+  color: var(--text-secondary);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  line-height: 1.55;
 }
 
 .doneBadge {
@@ -27,6 +45,13 @@
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 5px;
+}
+
+.progressWrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
 }
 
 .progressBar {
@@ -43,7 +68,22 @@
   transition: width 0.2s ease;
 }
 
+.progressText {
+  color: var(--text-muted);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  min-width: 32px;
+  text-align: right;
+}
+
 .controlsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.inlineGroup {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -93,6 +133,12 @@
   border-color: var(--border2);
 }
 
+.btn[aria-pressed="true"] {
+  background: rgba(124, 106, 247, 0.2);
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
 .btn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
@@ -136,4 +182,47 @@
   background: rgba(124, 106, 247, 0.2);
   border-color: var(--accent);
   color: var(--accent2);
+}
+
+@media (max-width: 520px) {
+  .controlPanel {
+    padding: 16px;
+  }
+
+  .controlsRow,
+  .speedRow {
+    align-items: stretch;
+  }
+
+  .controlsRow {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .inlineGroup {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .btn {
+    width: 100%;
+    min-height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .speedRow {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .speedButtons {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }

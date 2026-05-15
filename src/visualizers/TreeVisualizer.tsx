@@ -102,6 +102,20 @@ export function TreeVisualizer({ step, tree, rootId }: TreeVisualizerProps) {
   }, [layout]);
 
   const maxY = Math.max(...layout.map((n) => n.y), 60) + NODE_R + 20;
+  const visualizerTitle = step ? step.description : `Binary search tree visualization with ${layout.length} nodes`;
+  const nodeValues = layout.map((n) => n.value).join(", ");
+  const activeValue = step?.activeNodeId !== null && step?.activeNodeId !== undefined
+    ? treeToRender[step.activeNodeId]?.value
+    : null;
+  const visualizerDescription = layout.length === 0
+    ? "Tree is empty."
+    : `Tree values in order: ${nodeValues}. ${
+      activeValue !== null && activeValue !== undefined
+        ? `Active node value: ${activeValue}.`
+        : step?.targetValue !== undefined
+          ? `Target value: ${step.targetValue}.`
+          : "No active node."
+    }`;
 
   // Collect all edges
   const edges: { parentId: number; childId: number }[] = [];
@@ -118,72 +132,82 @@ export function TreeVisualizer({ step, tree, rootId }: TreeVisualizerProps) {
         viewBox={`0 0 ${SVG_W} ${maxY}`}
         style={{ overflow: "visible", minHeight: 120 }}
         role="img"
-        aria-label="Binary search tree visualization"
+        aria-labelledby="tree-visualizer-title"
+        aria-describedby="tree-visualizer-desc"
       >
-        {/* Edges first (behind nodes) */}
-        {edges.map(({ parentId, childId }) => {
-          const p = posMap[parentId];
-          const c = posMap[childId];
-          if (!p || !c) return null;
-          const color = getEdgeColor(parentId, childId, step);
-          // Offset edge endpoints to circle boundary
-          const dx = c.x - p.x, dy = c.y - p.y;
-          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-          const x1 = p.x + (dx / dist) * NODE_R;
-          const y1 = p.y + (dy / dist) * NODE_R;
-          const x2 = c.x - (dx / dist) * NODE_R;
-          const y2 = c.y - (dy / dist) * NODE_R;
-          return (
-            <line
-              key={`${parentId}-${childId}`}
-              x1={x1} y1={y1} x2={x2} y2={y2}
-              stroke={color}
-              strokeWidth={2}
-              style={{ transition: "stroke 0.2s" }}
-            />
-          );
-        })}
-
-        {/* Nodes */}
-        {layout.map((n) => {
-          const { fill, stroke, textColor } = getNodeColor(n.id, step);
-          const isNew = step?.newNodeId === n.id;
-          return (
-            <g key={n.id} style={{ transition: "transform 0.3s" }}>
-              <circle
-                cx={n.x} cy={n.y} r={NODE_R}
-                fill={fill} stroke={stroke} strokeWidth={isNew ? 2.5 : 1.5}
-                style={{ transition: "fill 0.2s, stroke 0.2s" }}
+        <title id="tree-visualizer-title">{visualizerTitle}</title>
+        <desc id="tree-visualizer-desc">{visualizerDescription}</desc>
+        <g aria-hidden="true">
+          {/* Edges first (behind nodes) */}
+          {edges.map(({ parentId, childId }) => {
+            const p = posMap[parentId];
+            const c = posMap[childId];
+            if (!p || !c) return null;
+            const color = getEdgeColor(parentId, childId, step);
+            // Offset edge endpoints to circle boundary
+            const dx = c.x - p.x, dy = c.y - p.y;
+            const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+            const x1 = p.x + (dx / dist) * NODE_R;
+            const y1 = p.y + (dy / dist) * NODE_R;
+            const x2 = c.x - (dx / dist) * NODE_R;
+            const y2 = c.y - (dy / dist) * NODE_R;
+            return (
+              <line
+                key={`${parentId}-${childId}`}
+                aria-hidden="true"
+                x1={x1} y1={y1} x2={x2} y2={y2}
+                stroke={color}
+                strokeWidth={2}
+                style={{ transition: "stroke 0.2s" }}
               />
-              <text
-                x={n.x} y={n.y + 1}
-                textAnchor="middle" dominantBaseline="middle"
-                fontSize={13} fontWeight="700"
-                fontFamily="'JetBrains Mono', monospace"
-                fill={textColor}
-                style={{ transition: "fill 0.2s" }}
-              >
-                {n.value}
-              </text>
-              {isNew && (
-                <circle
-                  cx={n.x} cy={n.y} r={NODE_R + 6}
-                  fill="none" stroke="#34d399" strokeWidth={1.5}
-                  strokeDasharray="4 3" opacity={0.6}
-                />
-              )}
-            </g>
-          );
-        })}
+            );
+          })}
 
-        {/* Empty state */}
-        {layout.length === 0 && (
-          <text x={SVG_W / 2} y={60} textAnchor="middle"
-            fontSize={13} fill="#44445a"
-            fontFamily="'JetBrains Mono', monospace">
-            Tree is empty; insert a value to begin
-          </text>
-        )}
+          {/* Nodes */}
+          {layout.map((n) => {
+            const { fill, stroke, textColor } = getNodeColor(n.id, step);
+            const isNew = step?.newNodeId === n.id;
+            return (
+              <g key={n.id} style={{ transition: "transform 0.3s" }}>
+                <circle
+                  aria-hidden="true"
+                  cx={n.x} cy={n.y} r={NODE_R}
+                  fill={fill} stroke={stroke} strokeWidth={isNew ? 2.5 : 1.5}
+                  style={{ transition: "fill 0.2s, stroke 0.2s" }}
+                />
+                <text
+                  aria-hidden="true"
+                  x={n.x} y={n.y + 1}
+                  textAnchor="middle" dominantBaseline="middle"
+                  fontSize={13} fontWeight="700"
+                  fontFamily="'JetBrains Mono', monospace"
+                  fill={textColor}
+                  style={{ transition: "fill 0.2s" }}
+                >
+                  {n.value}
+                </text>
+                {isNew && (
+                  <circle
+                    aria-hidden="true"
+                    cx={n.x} cy={n.y} r={NODE_R + 6}
+                    fill="none" stroke="#34d399" strokeWidth={1.5}
+                    strokeDasharray="4 3" opacity={0.6}
+                  />
+                )}
+              </g>
+            );
+          })}
+
+          {/* Empty state */}
+          {layout.length === 0 && (
+            <text x={SVG_W / 2} y={60} textAnchor="middle"
+              aria-hidden="true"
+              fontSize={13} fill="#44445a"
+              fontFamily="'JetBrains Mono', monospace">
+              Tree is empty; insert a value to begin
+            </text>
+          )}
+        </g>
       </svg>
     </div>
   );
