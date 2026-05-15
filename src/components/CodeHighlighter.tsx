@@ -53,7 +53,7 @@ export function CodeHighlighter({ code, activeLine, stepType }: CodeHighlighterP
                 {line}
               </span>
               {isActive && (
-                <span className={styles.lineArrow} style={{ color: colors.border }}>{"<"}</span>
+                <span className={styles.lineArrow} style={{ color: colors.border }} aria-hidden="true">{"<"}</span>
               )}
             </div>
           );

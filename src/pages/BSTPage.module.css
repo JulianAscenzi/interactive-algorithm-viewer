@@ -84,6 +84,13 @@
   flex: 0 0 auto;
 }
 
+.inputError {
+  color: var(--red);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  margin-top: -8px;
+}
+
 .descriptionBar {
   display: flex;
   align-items: center;

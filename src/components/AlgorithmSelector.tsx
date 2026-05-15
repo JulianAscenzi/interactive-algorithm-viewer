@@ -15,6 +15,7 @@ export function AlgorithmSelector({ selectedId, onSelect }: AlgorithmSelectorPro
           key={algo.id}
           className={`${styles.algoBtn} ${selectedId === algo.id ? styles.active : ""}`}
           onClick={() => onSelect(algo.id)}
+          aria-pressed={selectedId === algo.id}
         >
           <span className={styles.algoBtnName}>{algo.name}</span>
           <span className={styles.algoBtnComplexity}>{algo.complexity.time}</span>

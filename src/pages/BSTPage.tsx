@@ -33,6 +33,16 @@ const BADGE: Record<string, [string, string, string]> = {
 
 type Mode = "insert" | "search";
 
+function parseBSTInput(value: string): number | null {
+  const normalized = value.trim();
+  if (!/^\d+$/.test(normalized)) return null;
+
+  const parsed = Number(normalized);
+  if (!Number.isInteger(parsed) || parsed < 0 || parsed > 999) return null;
+
+  return parsed;
+}
+
 export default function BSTPage() {
   const [starter] = useState(buildStarterTree);
   const [tree, setTree] = useState<BSTTree>(starter.tree);
@@ -47,6 +57,11 @@ export default function BSTPage() {
 
   const step = steps.length > 0 ? steps[cur] : null;
   const code = mode === "insert" ? BST_INSERT_CODE : BST_SEARCH_CODE;
+  const parsedInput = parseBSTInput(inputVal);
+  const hasInput = inputVal.trim() !== "";
+  const inputError = hasInput && parsedInput === null
+    ? "Enter an integer from 0 to 999."
+    : "";
 
   useEffect(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -67,8 +82,8 @@ export default function BSTPage() {
   }, [playing, speedMs, steps.length]);
 
   function handleRun() {
-    const v = parseInt(inputVal, 10);
-    if (isNaN(v) || v < 0 || v > 999) return;
+    const v = parsedInput;
+    if (v === null) return;
 
     setPlaying(false);
     if (mode === "insert") {
@@ -123,6 +138,7 @@ export default function BSTPage() {
         <button
           className={`${styles.bstTab} ${mode === "insert" ? styles.active : ""}`}
           onClick={() => handleModeSwitch("insert")}
+          aria-pressed={mode === "insert"}
         >
           <span>Insert</span>
           <code>O(h)</code>
@@ -130,6 +146,7 @@ export default function BSTPage() {
         <button
           className={`${styles.bstTab} ${mode === "search" ? styles.active : ""}`}
           onClick={() => handleModeSwitch("search")}
+          aria-pressed={mode === "search"}
         >
           <span>Search</span>
           <code>O(h)</code>
@@ -140,18 +157,20 @@ export default function BSTPage() {
       <div className={styles.bstInputRow}>
         <input
           className={styles.bstInput}
-          type="number"
-          min={0}
-          max={999}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
           placeholder="Enter a value (0-999)"
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleRun()}
+          onKeyDown={(e) => e.key === "Enter" && parsedInput !== null && handleRun()}
+          aria-invalid={inputError ? "true" : "false"}
+          aria-describedby={inputError ? "bst-input-error" : undefined}
         />
         <button
           className={`${playbackPrimaryButtonClass} ${styles.inputButton}`}
           onClick={handleRun}
-          disabled={inputVal === "" || isNaN(parseInt(inputVal, 10))}
+          disabled={parsedInput === null}
         >
           {mode === "insert" ? "Insert" : "Search"}
         </button>
@@ -159,9 +178,14 @@ export default function BSTPage() {
           Reset Tree
         </button>
       </div>
+      {inputError && (
+        <p id="bst-input-error" className={styles.inputError} aria-live="polite">
+          {inputError}
+        </p>
+      )}
 
       <div className={styles.descriptionBar}>
-        <span className={styles.stepDescription}>
+        <span className={styles.stepDescription} aria-live="polite">
           {step
             ? step.description
             : mode === "insert"
@@ -191,7 +215,7 @@ export default function BSTPage() {
               ["#4c1d1d", "#f87171", "Not Found"],
             ].map(([fill, stroke, label]) => (
               <div key={label} className={styles.legendItem}>
-                <svg width="14" height="14" className={styles.legendIcon}>
+                <svg width="14" height="14" className={styles.legendIcon} aria-hidden="true">
                   <circle cx="7" cy="7" r="6" fill={fill} stroke={stroke} strokeWidth="1.5" />
                 </svg>
                 {label}

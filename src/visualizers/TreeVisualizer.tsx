@@ -117,6 +117,8 @@ export function TreeVisualizer({ step, tree, rootId }: TreeVisualizerProps) {
         width="100%"
         viewBox={`0 0 ${SVG_W} ${maxY}`}
         style={{ overflow: "visible", minHeight: 120 }}
+        role="img"
+        aria-label="Binary search tree visualization"
       >
         {/* Edges first (behind nodes) */}
         {edges.map(({ parentId, childId }) => {

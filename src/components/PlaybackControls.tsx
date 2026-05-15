@@ -59,7 +59,14 @@ export function PlaybackControls({
       </div>
 
       {showProgress && (
-        <div className={styles.progressBar}>
+        <div
+          className={styles.progressBar}
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={totalSteps > 1 ? totalSteps - 1 : 0}
+          aria-valuenow={hasSteps ? currentStep : 0}
+          aria-label="Visualization progress"
+        >
           <div className={styles.progressFill} style={{ width: `${progress}%` }} />
         </div>
       )}
@@ -113,6 +120,7 @@ export function PlaybackControls({
               key={opt.value}
               className={`${styles.btn} ${styles.btnSpeed} ${speed === opt.value ? styles.active : ""}`}
               onClick={() => onSpeedChange(opt.value)}
+              aria-pressed={speed === opt.value}
             >
               {opt.label}
             </button>

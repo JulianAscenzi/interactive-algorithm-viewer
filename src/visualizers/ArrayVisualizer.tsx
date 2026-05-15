@@ -37,7 +37,13 @@ export function ArrayVisualizer({ step, inputArray }: ArrayVisualizerProps) {
 
   return (
     <div className={styles.visualizerContainer}>
-      <svg width="100%" viewBox={`0 0 ${SVG_W} ${SVG_H}`} style={{ overflow: "visible" }}>
+      <svg
+        width="100%"
+        viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+        style={{ overflow: "visible" }}
+        role="img"
+        aria-label="Array visualization"
+      >
         {arr.map((val, i) => {
           const barH = Math.max(Math.round((val / maxVal) * maxBarH), 12);
           const x = 20 + i * (barW + GAP);
