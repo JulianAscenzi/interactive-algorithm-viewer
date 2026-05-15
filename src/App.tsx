@@ -71,12 +71,14 @@ export default function App() {
             <button
               className={`${styles.sectionBtn} ${section === "sorting" ? styles.active : ""}`}
               onClick={() => setSection("sorting")}
+              aria-pressed={section === "sorting"}
             >
               Sorting
             </button>
             <button
               className={`${styles.sectionBtn} ${section === "trees" ? styles.active : ""}`}
               onClick={() => setSection("trees")}
+              aria-pressed={section === "trees"}
             >
               Trees
             </button>
@@ -99,7 +101,7 @@ export default function App() {
           <>
             <p className={styles.algoDescription}>{algo.description}</p>
             <div className={styles.descriptionBar}>
-              <span className={styles.stepDescription}>
+              <span className={styles.stepDescription} aria-live="polite">
                 {step ? step.description : "Generate an array and press Run to start the visualization."}
               </span>
               {badge && (
